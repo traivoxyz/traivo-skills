@@ -100,6 +100,17 @@ pnpm build       # tsup → dist/
 Adding a skill: create `skills/<name>/SKILL.md` with `name` (equal to the folder) and a `description` of at most
 1,024 characters saying when to use it; put helpers in `skills/<name>/scripts/` with unit tests in `tests/`.
 
+## Links
+
+Traivo $TRVO — The AI trading copilot for Ethereum Chain: it reads your wallet, watches the market, and prepares every trade for you to approve.
+
+- Telegram: https://t.me/traivo
+- X: https://x.com/traivoxyz
+- Website: https://traivo.xyz
+- Docs: https://docs.traivo.xyz
+- App: https://dapp.traivo.xyz
+- GitHub: https://github.com/traivoxyz
+
 ## License
 
 MIT © Traivo
