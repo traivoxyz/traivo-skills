@@ -1,0 +1,172 @@
+[
+  {
+    "name": "tokenized stock, deep pool, fresh reference, wallet ok, cheap gas",
+    "quote": { "amountIn": 5000, "amountOut": 27.5, "impactBps": 1, "premiumBps": 20, "referenceAge": 60 },
+    "options": {
+      "symbol": "NVDA",
+      "side": "buy",
+      "kind": "stock",
+      "slippageBps": 50,
+      "balance": 6000,
+      "eth": 0.05,
+      "exitUsd": 400000,
+      "gas": { "gwei": 1, "ethUsd": 4000 }
+    },
+    "verdict": "pass",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs real share": "pass",
+      "Exit liquidity": "pass",
+      "Slippage limit": "pass",
+      "Balance": "pass",
+      "Gas": "pass",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "impact at the warn edge adds an MEV warning",
+    "quote": { "amountIn": 5000, "impactBps": 50, "premiumBps": 99.9, "referenceAge": 0 },
+    "options": { "symbol": "TSLA", "side": "buy", "kind": "stock", "slippageBps": 100 },
+    "verdict": "warn",
+    "levels": { "Liquidity depth": "warn", "Price vs real share": "pass", "Slippage limit": "pass", "Contract": "pass" }
+  },
+  {
+    "name": "impact and premium at the fail edge",
+    "quote": { "amountIn": 50000, "impactBps": 200, "premiumBps": -300, "referenceAge": 0 },
+    "options": { "symbol": "SLV", "side": "buy", "kind": "stock", "slippageBps": 101 },
+    "verdict": "fail",
+    "levels": {
+      "Liquidity depth": "fail",
+      "Price vs real share": "fail",
+      "Slippage limit": "warn",
+      "MEV exposure": "warn",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "unreviewed token without reference, thin exit",
+    "quote": { "amountIn": 1000, "impactBps": 10, "premiumBps": null },
+    "options": { "symbol": "XYZ", "side": "buy", "kind": "token", "via": "WETH", "slippageBps": 50, "exitUsd": 20000 },
+    "verdict": "warn",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price reference": "warn",
+      "Exit liquidity": "warn",
+      "Slippage limit": "pass",
+      "Contract": "warn"
+    }
+  },
+  {
+    "name": "trade over 20% of exit liquidity fails",
+    "quote": { "amountIn": 10000, "impactBps": 30, "premiumBps": 10, "referenceAge": 0 },
+    "options": { "symbol": "GOOGL", "side": "buy", "kind": "stock", "slippageBps": 50, "exitUsd": 40000 },
+    "verdict": "fail",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs real share": "pass",
+      "Exit liquidity": "fail",
+      "Slippage limit": "pass",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "selling all the ETH leaves nothing for gas, balance short",
+    "quote": { "amountIn": 1, "amountOut": 4000, "impactBps": 2, "premiumBps": 5 },
+    "options": {
+      "symbol": "ETH",
+      "side": "sell",
+      "kind": "eth",
+      "slippageBps": 50,
+      "balance": 0.5,
+      "eth": 1.0001,
+      "gas": { "gwei": 2, "ethUsd": 4000 }
+    },
+    "verdict": "fail",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs wider market": "pass",
+      "Slippage limit": "pass",
+      "Balance": "fail",
+      "Gas": "fail",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "no ETH for gas on a buy",
+    "quote": { "amountIn": 1000, "impactBps": 0, "premiumBps": 0, "referenceAge": 0 },
+    "options": {
+      "symbol": "AAPL",
+      "side": "buy",
+      "kind": "stock",
+      "slippageBps": 30,
+      "balance": 1000,
+      "eth": 0,
+      "gas": { "gwei": 1, "ethUsd": 4000 }
+    },
+    "verdict": "fail",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs real share": "pass",
+      "Slippage limit": "pass",
+      "Balance": "pass",
+      "Gas": "fail",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "small trade: gas between 1% and 5% of size warns",
+    "quote": { "amountIn": 100, "impactBps": 0, "premiumBps": 0, "referenceAge": 0 },
+    "options": {
+      "symbol": "SPY",
+      "side": "buy",
+      "kind": "stock",
+      "slippageBps": 50,
+      "balance": 100,
+      "eth": 0.05,
+      "gas": { "gwei": 2, "ethUsd": 4000 }
+    },
+    "verdict": "warn",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs real share": "pass",
+      "Slippage limit": "pass",
+      "Balance": "pass",
+      "Gas": "pass",
+      "Gas vs size": "warn",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "tiny trade: gas above 5% of size fails",
+    "quote": { "amountIn": 20, "impactBps": 0, "premiumBps": 0, "referenceAge": 0 },
+    "options": {
+      "symbol": "SPY",
+      "side": "buy",
+      "kind": "stock",
+      "slippageBps": 50,
+      "gas": { "gwei": 2, "ethUsd": 4000 }
+    },
+    "verdict": "fail",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs real share": "pass",
+      "Slippage limit": "pass",
+      "Gas vs size": "fail",
+      "Contract": "pass"
+    }
+  },
+  {
+    "name": "wallet known but gas price unknown warns",
+    "quote": { "amountIn": 1000, "impactBps": 0, "premiumBps": 0, "referenceAge": 0 },
+    "options": { "symbol": "ETH", "side": "buy", "kind": "eth", "slippageBps": 50, "balance": 2000, "eth": 0.1 },
+    "verdict": "warn",
+    "levels": {
+      "Liquidity depth": "pass",
+      "Price vs wider market": "pass",
+      "Slippage limit": "pass",
+      "Balance": "pass",
+      "Gas": "warn",
+      "Contract": "pass"
+    }
+  }
+]
